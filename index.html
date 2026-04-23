@@ -33,9 +33,16 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1}
 </head>
 <body>
 
-<audio autoplay loop>
-<source src="mann_mera.mp3" type="audio/mp3">
-</audio>
+ <!-- Music Control Icon -->
+    <div class="music-control" onclick="toggleMusic()">
+        <i class="fas fa-music" id="music-icon"></i>
+    </div>
+
+    <!-- Hidden Audio Player -->
+    <!-- CUSTOMIZE: Replace 'music.mp3' with your audio file URL -->
+    <audio id="bg-music" loop>
+        <source src="mann_mera.mp3" type="audio/mp3">
+    </audio>
 
 <div id="page1" class="page">
 <h1>Aiman ✨</h1>
