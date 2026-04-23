@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You ✨</title>
 
-<!-- Font Awesome for music icon -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
@@ -21,7 +20,6 @@ p{margin-top:20px;font-size:1.2rem;opacity:0.8;max-width:600px;white-space:pre-l
 button{margin-top:40px;padding:12px 30px;border:none;border-radius:30px;background:linear-gradient(45deg,#7afcff,#c77dff);color:#000;font-weight:bold;cursor:pointer;transition:0.3s}
 button:hover{transform:scale(1.1);box-shadow:0 0 20px #c77dff}
 
-/* Music button */
 .music-control{
  position:fixed;
  top:20px;
@@ -33,14 +31,12 @@ button:hover{transform:scale(1.1);box-shadow:0 0 20px #c77dff}
  border-radius:50%;
 }
 
-/* Floating hearts */
 .heart{position:absolute;width:10px;height:10px;background:rgba(255,100,150,0.4);transform:rotate(45deg);animation:float 10s linear infinite}
 .heart:before,.heart:after{content:'';position:absolute;width:10px;height:10px;background:rgba(255,100,150,0.4);border-radius:50%}
 .heart:before{top:-5px;left:0}
 .heart:after{left:-5px;top:0}
 @keyframes float{0%{transform:translateY(100vh) rotate(45deg)}100%{transform:translateY(-10vh) rotate(45deg)}}
 
-/* Fireworks */
 .firework{position:absolute;width:4px;height:4px;background:#fff;border-radius:50%;animation:explode 1.5s ease-out infinite}
 @keyframes explode{
 0%{opacity:1;transform:scale(1)}
@@ -53,12 +49,10 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1}
 
 <body>
 
-<!-- Music Control -->
 <div class="music-control" onclick="toggleMusic()">
  <i class="fas fa-music"></i>
 </div>
 
-<!-- Audio -->
 <audio id="bg-music" loop>
  <source src="mann_mera.mp3" type="audio/mp3">
 </audio>
@@ -85,14 +79,23 @@ Because someone somewhere is grateful you exist.</p>
 <canvas id="bg"></canvas>
 
 <script>
-// Page navigation + auto music start
+
+// 🔥 FORCE PLAY ON FIRST CLICK ANYWHERE
+document.addEventListener("click", function () {
+ const music = document.getElementById("bg-music");
+ if (music.paused) {
+   music.play().catch(()=>{});
+ }
+}, { once: true });
+
+// Page navigation
 function nextPage(n){
  document.getElementById('page'+n).classList.add('hidden');
  document.getElementById('page'+(n+1)).classList.remove('hidden');
 
  const music = document.getElementById("bg-music");
  if (music.paused) {
-   music.play().catch(() => {});
+   music.play().catch(()=>{});
  }
 
  if(n === 2){
@@ -100,7 +103,7 @@ function nextPage(n){
  }
 }
 
-// Toggle music button
+// Toggle button
 function toggleMusic() {
  const music = document.getElementById("bg-music");
  if (music.paused) {
@@ -153,6 +156,7 @@ function draw(){
  requestAnimationFrame(draw);
 }
 draw();
+
 </script>
 
 </body>
