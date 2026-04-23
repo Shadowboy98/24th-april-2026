@@ -29,6 +29,16 @@ button:hover{transform:scale(1.1);box-shadow:0 0 20px #c77dff}
  background:rgba(255,255,255,0.1);
  padding:10px;
  border-radius:50%;
+ z-index: 1000; /* Ensures it stays on top */
+ transition: 0.3s;
+ width: 45px;
+ height: 45px;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+.music-control:hover {
+  background:rgba(255,255,255,0.3);
 }
 
 .heart{position:absolute;width:10px;height:10px;background:rgba(255,100,150,0.4);transform:rotate(45deg);animation:float 10s linear infinite}
@@ -50,11 +60,12 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1}
 <body>
 
 <div class="music-control" onclick="toggleMusic()">
- <i class="fas fa-music"></i>
+ <i id="music-icon" class="fas fa-music"></i>
 </div>
 
-<audio id="bg-music" loop>
- <source src="musicc.mp3" type="audio/mp3">
+<audio id="bg-music" loop preload="auto">
+ <source src="./musicc.mp3" type="audio/mp3">
+ Your browser does not support the audio element.
 </audio>
 
 <div id="page1" class="page">
@@ -79,12 +90,22 @@ Because someone somewhere is grateful you exist.</p>
 <canvas id="bg"></canvas>
 
 <script>
+const music = document.getElementById("bg-music");
+const musicIcon = document.getElementById("music-icon");
 
-// 🔥 FORCE PLAY ON FIRST CLICK ANYWHERE
-document.addEventListener("click", function () {
- const music = document.getElementById("bg-music");
- if (music.paused) {
-   music.play().catch(()=>{});
+// Function to handle playing audio and updating icon
+function playAudio() {
+  music.play().then(() => {
+    musicIcon.className = "fas fa-pause"; // Change to pause icon when playing
+  }).catch((error) => {
+    console.log("Browser blocked autoplay or file not found:", error);
+  });
+}
+
+// 🔥 FORCE PLAY ON FIRST CLICK ANYWHERE (except the music toggle button itself)
+document.addEventListener("click", function (event) {
+ if (music.paused && !event.target.closest('.music-control')) {
+   playAudio();
  }
 }, { once: true });
 
@@ -93,9 +114,8 @@ function nextPage(n){
  document.getElementById('page'+n).classList.add('hidden');
  document.getElementById('page'+(n+1)).classList.remove('hidden');
 
- const music = document.getElementById("bg-music");
  if (music.paused) {
-   music.play().catch(()=>{});
+   playAudio();
  }
 
  if(n === 2){
@@ -105,11 +125,11 @@ function nextPage(n){
 
 // Toggle button
 function toggleMusic() {
- const music = document.getElementById("bg-music");
  if (music.paused) {
-   music.play();
+   playAudio();
  } else {
    music.pause();
+   musicIcon.className = "fas fa-music"; // Change back to music note when paused
  }
 }
 
@@ -156,6 +176,12 @@ function draw(){
  requestAnimationFrame(draw);
 }
 draw();
+
+// Handle window resize for canvas
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
 
 </script>
 
