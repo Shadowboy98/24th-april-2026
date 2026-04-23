@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You ✨</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#0b0f1a;color:#fff;overflow:hidden}
+.page{position:absolute;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;transition:opacity 1s ease, transform 1s ease}
+.hidden{opacity:0;pointer-events:none;transform:scale(1.1)}
+h1{font-size:3rem;letter-spacing:2px;text-shadow:0 0 20px #7afcff,0 0 40px #7afcff}
+p{margin-top:20px;font-size:1.2rem;opacity:0.8;max-width:600px;white-space:pre-line}
+button{margin-top:40px;padding:12px 30px;border:none;border-radius:30px;background:linear-gradient(45deg,#7afcff,#c77dff);color:#000;font-weight:bold;cursor:pointer;transition:0.3s}
+button:hover{transform:scale(1.1);box-shadow:0 0 20px #c77dff}
+
+/* Floating hearts */
+.heart{position:absolute;width:10px;height:10px;background:rgba(255,100,150,0.4);transform:rotate(45deg);animation:float 10s linear infinite}
+.heart:before,.heart:after{content:'';position:absolute;width:10px;height:10px;background:rgba(255,100,150,0.4);border-radius:50%}
+.heart:before{top:-5px;left:0}
+.heart:after{left:-5px;top:0}
+@keyframes float{0%{transform:translateY(100vh) rotate(45deg)}100%{transform:translateY(-10vh) rotate(45deg)}}
+
+/* Fireworks */
+.firework{position:absolute;width:4px;height:4px;background:#fff;border-radius:50%;animation:explode 1.5s ease-out infinite}
+@keyframes explode{
+0%{opacity:1;transform:scale(1)}
+100%{opacity:0;transform:scale(8)}
+}
+
+canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1}
+</style>
+</head>
+<body>
+
+<audio autoplay loop>
+<source src="file:///D:/IMPORTANT/8D%20music/Mann%20Mera.mp3" type="audio/mp3">
+</audio>
+
+<div id="page1" class="page">
+<h1>Aiman ✨</h1>
+<p>Like a quiet star that chose to stay… you light my world in ways words never could.</p>
+<button onclick="nextPage(1)">Begin</button>
+</div>
+
+<div id="page2" class="page hidden">
+<h1>A little wish…</h1>
+<p>May your smile never fade,
+May your dreams always find you,
+And may life be gentle with your heart…
+Because someone somewhere is grateful you exist.</p>
+<button onclick="nextPage(2)">Continue</button>
+</div>
+
+<div id="page3" class="page hidden">
+<h1>Happy Birthday, Aiman 💖</h1>
+</div>
+
+<canvas id="bg"></canvas>
+
+<script>
+function nextPage(n){
+ document.getElementById('page'+n).classList.add('hidden');
+ document.getElementById('page'+(n+1)).classList.remove('hidden');
+
+ // Only trigger hearts on page 3
+ if(n === 2){
+   createHearts();
+ }
+}
+
+// Create hearts ONLY for page 3
+function createHearts(){
+ for(let i=0;i<30;i++){
+   let h=document.createElement('div');
+   h.className='heart';
+   h.style.left=Math.random()*100+'vw';
+   h.style.animationDuration=(5+Math.random()*5)+'s';
+   document.body.appendChild(h);
+ }
+}
+
+// Fireworks (all pages as before)
+for(let i=0;i<15;i++){
+ let f=document.createElement('div');
+ f.className='firework';
+ f.style.top=Math.random()*100+'vh';
+ f.style.left=Math.random()*100+'vw';
+ f.style.animationDelay=Math.random()*2+'s';
+ document.body.appendChild(f);
+}
+
+// Stars background
+const canvas=document.getElementById('bg');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+let stars=[];
+for(let i=0;i<100;i++){
+ stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.5});
+}
+function draw(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle='white';
+ stars.forEach(s=>{
+ ctx.beginPath();
+ ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+ ctx.fill();
+ });
+ requestAnimationFrame(draw);
+}
+draw();
+</script>
+
+</body>
+</html>
