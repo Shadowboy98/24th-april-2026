@@ -20,6 +20,7 @@ p{margin-top:20px;font-size:1.2rem;opacity:0.8;max-width:600px;white-space:pre-l
 button{margin-top:40px;padding:12px 30px;border:none;border-radius:30px;background:linear-gradient(45deg,#7afcff,#c77dff);color:#000;font-weight:bold;cursor:pointer;transition:0.3s}
 button:hover{transform:scale(1.1);box-shadow:0 0 20px #c77dff}
 
+/* Music Button */
 .music-control{
  position:fixed;
  top:20px;
@@ -29,17 +30,15 @@ button:hover{transform:scale(1.1);box-shadow:0 0 20px #c77dff}
  background:rgba(255,255,255,0.1);
  padding:10px;
  border-radius:50%;
- z-index: 1000; /* Ensures it stays on top */
- transition: 0.3s;
- width: 45px;
- height: 45px;
- display: flex;
- justify-content: center;
- align-items: center;
+ z-index:1000;
+ width:45px;
+ height:45px;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ transition:0.3s;
 }
-.music-control:hover {
-  background:rgba(255,255,255,0.3);
-}
+.music-control:hover{background:rgba(255,255,255,0.3)}
 
 .heart{position:absolute;width:10px;height:10px;background:rgba(255,100,150,0.4);transform:rotate(45deg);animation:float 10s linear infinite}
 .heart:before,.heart:after{content:'';position:absolute;width:10px;height:10px;background:rgba(255,100,150,0.4);border-radius:50%}
@@ -63,9 +62,9 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1}
  <i id="music-icon" class="fas fa-music"></i>
 </div>
 
+<!-- UPDATED MUSIC SECTION -->
 <audio id="bg-music" loop preload="auto">
  <source src="mannmera.mp3" type="audio/mp3">
- Your browser does not support the audio element.
 </audio>
 
 <div id="page1" class="page">
@@ -93,29 +92,30 @@ Because someone somewhere is grateful you exist.</p>
 const music = document.getElementById("bg-music");
 const musicIcon = document.getElementById("music-icon");
 
-// Function to handle playing audio and updating icon
-function playAudio() {
-  music.play().then(() => {
-    musicIcon.className = "fas fa-pause"; // Change to pause icon when playing
-  }).catch((error) => {
-    console.log("Browser blocked autoplay or file not found:", error);
+// 🔥 IMPROVED PLAY FUNCTION (from 2nd file logic)
+function playMusic() {
+  music.volume = 0.4;
+  music.play().then(()=>{
+    musicIcon.className = "fas fa-volume-up";
+  }).catch(()=>{
+    console.log("User interaction needed");
   });
 }
 
-// 🔥 FORCE PLAY ON FIRST CLICK ANYWHERE (except the music toggle button itself)
-document.addEventListener("click", function (event) {
- if (music.paused && !event.target.closest('.music-control')) {
-   playAudio();
+// 🔥 AUTO PLAY ON FIRST INTERACTION
+document.addEventListener("click", () => {
+ if(music.paused){
+   playMusic();
  }
-}, { once: true });
+}, { once:true });
 
 // Page navigation
 function nextPage(n){
  document.getElementById('page'+n).classList.add('hidden');
  document.getElementById('page'+(n+1)).classList.remove('hidden');
 
- if (music.paused) {
-   playAudio();
+ if(music.paused){
+   playMusic();
  }
 
  if(n === 2){
@@ -124,12 +124,12 @@ function nextPage(n){
 }
 
 // Toggle button
-function toggleMusic() {
- if (music.paused) {
-   playAudio();
+function toggleMusic(){
+ if(music.paused){
+   playMusic();
  } else {
    music.pause();
-   musicIcon.className = "fas fa-music"; // Change back to music note when paused
+   musicIcon.className = "fas fa-music";
  }
 }
 
@@ -177,12 +177,10 @@ function draw(){
 }
 draw();
 
-// Handle window resize for canvas
-window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+window.addEventListener('resize',()=>{
+ canvas.width=window.innerWidth;
+ canvas.height=window.innerHeight;
 });
-
 </script>
 
 </body>
